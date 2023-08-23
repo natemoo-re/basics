@@ -113,7 +113,9 @@ export function registerAction(handler: (event: Event) => void | Promise<void>, 
 	const name = handler.name;
 	const toRemove: Array<() => void> = [];
 	for (const el of scope.querySelectorAll(`[data-action="${name}"]`)) {
-		const { dataset: { trigger = 'click' } } = el as HTMLElement;
+		const {
+			dataset: { trigger = 'click' },
+		} = el as HTMLElement;
 		el.addEventListener(trigger, handler);
 		toRemove.push(() => el.removeEventListener(trigger, handler));
 	}
@@ -121,5 +123,5 @@ export function registerAction(handler: (event: Event) => void | Promise<void>, 
 		for (const remove of toRemove) {
 			remove();
 		}
-	}
+	};
 }
