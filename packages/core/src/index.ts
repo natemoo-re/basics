@@ -108,3 +108,18 @@ export function h(tag: string, props: Record<string, any> = {}, ...children: Chi
 	}
 	return element;
 }
+
+export function registerAction(handler: (event: Event) => void | Promise<void>, scope = document) {
+	const name = handler.name;
+	const toRemove: Array<() => void> = [];
+	for (const el of scope.querySelectorAll(`[data-action="${name}"]`)) {
+		const { dataset: { trigger = 'click' } } = el as HTMLElement;
+		el.addEventListener(trigger, handler);
+		toRemove.push(() => el.removeEventListener(trigger, handler));
+	}
+	return () => {
+		for (const remove of toRemove) {
+			remove();
+		}
+	}
+}
