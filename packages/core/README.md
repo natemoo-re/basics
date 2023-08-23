@@ -1,1 +1,1 @@
-# `@main/core`
+# `@basics/dom`

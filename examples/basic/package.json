@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "@main/core": "workspace:*"
+    "@basics/dom": "workspace:*"
   },
   "scripts": {
     "start": "jiti ./index.ts"

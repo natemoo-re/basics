@@ -1,5 +1,5 @@
 {
-  "name": "@main/core",
+  "name": "@basics/dom",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -15,13 +15,13 @@
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natemoo-re/clack",
-    "directory": "packages/core"
+    "url": "https://github.com/natemoo-re/basics",
+    "directory": "packages/dom"
   },
   "bugs": {
-    "url": "https://github.com/natemoo-re/clack/issues"
+    "url": "https://github.com/natemoo-re/basics/issues"
   },
-  "homepage": "https://github.com/natemoo-re/clack/tree/main/packages/core#readme",
+  "homepage": "https://github.com/natemoo-re/basics/tree/main/packages/dom#readme",
   "files": [
     "dist",
     "CHANGELOG.md"
@@ -32,7 +32,7 @@
     "url": "https://twitter.com/n_moore"
   },
   "license": "MIT",
-  "packageManager": "pnpm@7.6.0",
+  "packageManager": "pnpm@8.6.12",
   "scripts": {
     "build": "unbuild"
   },
