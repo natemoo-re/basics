@@ -109,8 +109,11 @@ export function h(tag: string, props: Record<string, any> = {}, ...children: Chi
 	return element;
 }
 
-export function registerAction(handler: (event: Event) => void | Promise<void>, scope = document) {
-	const name = handler.name;
+export function action(
+	name: string,
+	handler: (event: Event) => void | Promise<void>,
+	scope = document
+) {
 	const toRemove: Array<() => void> = [];
 	for (const el of scope.querySelectorAll(`[data-action="${name}"]`)) {
 		const {
