@@ -83,30 +83,65 @@ function createElement(tag: string): HTMLElement | SVGElement {
 	if (SVG_ELEMENTS.has(tag)) return document.createElementNS('http://www.w3.org/2000/svg', tag);
 	return document.createElement(tag);
 }
+
+export function h<C extends (props: Props, ...children: Child[]) => any, Props extends Record<string, any>>(
+	tag: C,
+	props?: Props,
+	...children: Child[]
+): any;
 export function h<K extends keyof HTMLElementTagNameMap>(
 	tagName: K,
 	props?: Record<string, any>,
 	...children: Child[]
 ): HTMLElementTagNameMap[K];
 export function h(tagName: string, props?: Record<string, any>, ...children: Child[]): HTMLElement;
-export function h(tag: string, props: Record<string, any> = {}, ...children: Child[]) {
-	const element = createElement(tag);
-	for (const [key, value] of Object.entries(props)) {
-		if (typeof value === 'function') {
-			element.addEventListener(key.replace(/^on/, ''), value);
-			continue;
+export function h(tag: any, props: Record<string, any> = {}, ...children: Child[]) {
+	if (typeof tag === "function") {
+		props.children = !props.children ? children : props.children;
+		return tag(props);
+	} else {
+		const element = createElement(tag);
+
+		// Normalize children
+		const normalized: Node[] = [];
+		normalizeChildren(normalized, children);
+
+		for (let i = 0; i < normalized.length; i++) {
+			const child = normalized[i];
+			element.appendChild(child);
 		}
-		if (key in element) {
-			(element as any)[key] = value;
-		} else {
-			element.setAttribute(key, value);
+
+		for (const [key, value] of Object.entries(props)) {
+			if (typeof value === 'function') {
+				element.addEventListener(key.replace(/^on/, ''), value);
+				continue;
+			}
+			if (key in element) {
+				(element as any)[key] = value;
+			} else {
+				element.setAttribute(key, value);
+			}
 		}
+
+		return element;
 	}
-	for (const child of children) {
-		if (child instanceof Node) element.appendChild(child);
-		if (child || child === 0) element.appendChild(new Text(`${child}`));
+}
+
+function normalizeChildren(arr: any[], child: any) {
+	// Ignore these
+	if (child == null || typeof child === "boolean" || child === 0) {
+		return;
 	}
-	return element;
+
+	if (Array.isArray(child)) {
+		for (let i = 0; i < child.length; i++) {
+			normalizeChildren(arr, child[i]);
+		}
+	} else if (typeof child === "object") {
+		arr.push(child);
+	} else {
+		arr.push(new Text(child));
+	}
 }
 
 export function action(
